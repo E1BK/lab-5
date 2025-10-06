@@ -384,7 +384,7 @@ public class Application {
                 final String course = courseField.getText();
 
                 try {
-                    final float bottomGrade = getBottomGradeUseCase.getTopGrade(course);
+                    final float bottomGrade = getBottomGradeUseCase.getBottomGrade(course);
                     JOptionPane.showMessageDialog(jFrame, "Bottom Grade: " + bottomGrade);
                     courseField.setText("");
                 }
