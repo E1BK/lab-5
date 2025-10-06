@@ -272,15 +272,8 @@ public class MongoGradeDataBase implements GradeDataBase {
                         .name(team.getString(NAME))
                         .members(members)
                         .build();
-            } else if (responseBody.getInt(STATUS_CODE) == 404) {
-                throw new RuntimeException(responseBody.getString(
-                        "You are not in a team"));
-            } else if (responseBody.getInt(STATUS_CODE) == 401) {
-                throw new RuntimeException(responseBody.getString(
-                        "Invalid token"));
-            } else{
-                throw new RuntimeException(responseBody.getString(
-                        "Unknown Error"));
+            }  else{
+                throw new RuntimeException(responseBody.getString(MESSAGE));
             }
 
 
