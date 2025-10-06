@@ -21,7 +21,7 @@ public final class GetMinGradeUseCase {
      */
     public float getMinGrade(String course) {
         // Call the API to get the usernames of all your team members
-        float min = 0;
+        float min = 99999;
         final Team team = gradeDataBase.getMyTeam();
         // Call the API to get all the grades for the course for all your team members
         for (String username : team.getMembers()) {
