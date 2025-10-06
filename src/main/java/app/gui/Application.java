@@ -51,6 +51,7 @@ public class Application {
         final LeaveTeamUseCase leaveTeamUseCase = config.leaveTeamUseCase();
         final GetAverageGradeUseCase getAverageGradeUseCase = config.getAverageGradeUseCase();
         final GetTopGradeUseCase getTopGradeUseCase = config.getTopGradeUseCase();
+        final GetMinGradeUseCase getMinGradeUseCase = config.getMinGradeUseCase();
 
         // this is the code that runs to set up our GUI
         SwingUtilities.invokeLater(() -> {
@@ -66,7 +67,7 @@ public class Application {
             final JPanel logGradeCard = createLogGradeCard(frame, logGradeUseCase);
             final JPanel formTeamCard = createFormTeamCard(frame, formTeamUseCase);
             final JPanel joinTeamCard = createJoinTeamCard(frame, joinTeamUseCase);
-            final JPanel manageTeamCard = createManageTeamCard(frame, leaveTeamUseCase, getAverageGradeUseCase, getTopGradeUseCase);
+            final JPanel manageTeamCard = createManageTeamCard(frame, leaveTeamUseCase, getAverageGradeUseCase, getTopGradeUseCase, getMinGradeUseCase);
 
             cardPanel.add(defaultCard, "DefaultCard");
             cardPanel.add(getGradeCard, "GetGradeCard");
@@ -321,14 +322,16 @@ public class Application {
 //                  Note: this will require you to update the code that calls this method.
     private static JPanel createManageTeamCard(JFrame jFrame, LeaveTeamUseCase leaveTeamUseCase,
                                                GetAverageGradeUseCase getAverageGradeUseCase,
-                                               GetTopGradeUseCase getTopGradeUseCase) {
+                                               GetTopGradeUseCase getTopGradeUseCase,
+                                               GetMinGradeUseCase getMinGradeUseCase) {
         final JPanel theCard = new JPanel();
         theCard.setLayout(new GridLayout(ROWS, COLS));
         final JTextField courseField = new JTextField(20);
         // make a separate line.
         final JButton getAverageButton = new JButton("Get Average Grade");
-        final JButton getTopGradeButton = new JButton("Get Top Grade");
         // TODO Task 4: Add another button for "Get Top Grade" (check the getAverageButton for example)
+        final JButton getTopGradeButton = new JButton("Get Top Grade");
+        final JButton getMinGradeButton = new JButton("Get Minimum Grade");
 
         final JButton leaveTeamButton = new JButton("Leave Team");
         final JLabel resultLabel = new JLabel();
@@ -372,6 +375,21 @@ public class Application {
             }
         });
 
+        getMinGradeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final String course = courseField.getText();
+
+                try {
+                    final float min = getTopGradeUseCase.getTopGrade(course);
+                    JOptionPane.showMessageDialog(jFrame, "Top Grade: " + min);
+                    courseField.setText("");
+                }
+                catch (JSONException ex) {
+                    JOptionPane.showMessageDialog(jFrame, ex.getMessage());
+                }
+            }
+        });
+
         leaveTeamButton.addActionListener(new ActionListener() {
             /**
              * Invoked when an action occurs.
@@ -395,6 +413,7 @@ public class Application {
         theCard.add(getAverageButton);
         theCard.add(leaveTeamButton);
         theCard.add(getTopGradeButton);
+        theCard.add(getMinGradeButton);
         theCard.add(resultLabel);
         return theCard;
 
