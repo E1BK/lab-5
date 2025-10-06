@@ -260,10 +260,7 @@ public class MongoGradeDataBase implements GradeDataBase {
             final Response response = client.newCall(request).execute();
             final JSONObject responseBody = new JSONObject(response.body().string());
 
-            if (responseBody.getInt(STATUS_CODE) != SUCCESS_CODE) {
-                throw new RuntimeException(responseBody.getString(MESSAGE));
-            }
-            else{
+            if (responseBody.getInt(STATUS_CODE) == SUCCESS_CODE) {
                 final JSONObject team = responseBody.getJSONObject("team");
                 final JSONArray membersArray = team.getJSONArray("members");
                 final String[] members = new String[membersArray.length()];
@@ -275,7 +272,17 @@ public class MongoGradeDataBase implements GradeDataBase {
                         .name(team.getString(NAME))
                         .members(members)
                         .build();
+            } else if (responseBody.getInt(STATUS_CODE) == 404) {
+                throw new RuntimeException(responseBody.getString(
+                        "You are not in a team"));
+            } else if (responseBody.getInt(STATUS_CODE) == 401) {
+                throw new RuntimeException(responseBody.getString(
+                        "Invalid token"));
+            } else{
+                throw new RuntimeException(responseBody.getString(
+                        "Unknown Error"));
             }
+
 
         } catch (IOException | JSONException event) {
             throw new RuntimeException(event);
